@@ -2,9 +2,11 @@
 pragma solidity 0.6.12;
 
 import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol";
+import '@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol';
 
 // SyrupBar with Governance.
 contract MasterPredWallet {
+    using SafeBEP20 for IBEP20;
     // The PRED TOKEN!
     IBEP20 public pred;
     address public owner;
@@ -21,10 +23,10 @@ contract MasterPredWallet {
         require(msg.sender == owner, "Wallet: Only MasterPred can transfer");
         uint256 predBal = pred.balanceOf(address(this));
         if (_amount > predBal) {
-            pred.transfer(_to, predBal);
+            pred.safeTransfer(_to, predBal);
             return predBal;
         } else {
-            pred.transfer(_to, _amount);
+            pred.safeTransfer(_to, _amount);
             return _amount;
         }
     }

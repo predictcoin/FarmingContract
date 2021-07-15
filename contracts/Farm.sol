@@ -79,7 +79,7 @@ contract MasterPred is Ownable {
     uint256 public totalAllocPoint = 0;
     // The block number when PRED mining starts.
     uint256 public startBlock;
-    // Amount of MasterPred PRED balance already allocated to pools
+    // Amount of MasterPred wallet balance already allocated to pools
     uint256 public totalDebt;
 
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
@@ -222,8 +222,9 @@ contract MasterPred is Ownable {
             }
         }
         if (_amount > 0) {
+            uint balBefore = pool.lpToken.balanceOf(address(this));
             pool.lpToken.safeTransferFrom(address(msg.sender), address(this), _amount);
-            user.amount = user.amount.add(_amount);
+            user.amount = user.amount.add(pool.lpToken.balanceOf(address(this)).sub(balBefore));
         }
         user.rewardDebt = user.amount.mul(pool.accPredPerShare).div(1e12);
         emit Deposit(msg.sender, _pid, _amount);
