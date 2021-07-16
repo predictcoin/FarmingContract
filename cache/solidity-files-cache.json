@@ -1,0 +1,408 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\contracts\\BEP20.sol": {
+      "lastModificationDate": 1626429803100,
+      "contentHash": "0af2201833da53eeef7f66a93d4f8da8",
+      "sourceName": "contracts/BEP20.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/BEP20.sol",
+        "@pancakeswap/pancake-swap-lib/contracts/math/SafeMath.sol"
+      ],
+      "versionPragmas": [],
+      "artifacts": [
+        "LPToken1",
+        "LPToken2",
+        "Test"
+      ]
+    },
+    "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\node_modules\\@pancakeswap\\pancake-swap-lib\\contracts\\token\\BEP20\\BEP20.sol": {
+      "lastModificationDate": 1626185695483,
+      "contentHash": "11050257d698ec3930a69503f3fd12b1",
+      "sourceName": "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/BEP20.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../../access/Ownable.sol",
+        "../../GSN/Context.sol",
+        "./IBEP20.sol",
+        "../../math/SafeMath.sol",
+        "../../utils/Address.sol"
+      ],
+      "versionPragmas": [
+        ">=0.4.0"
+      ],
+      "artifacts": [
+        "BEP20"
+      ]
+    },
+    "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\node_modules\\@pancakeswap\\pancake-swap-lib\\contracts\\math\\SafeMath.sol": {
+      "lastModificationDate": 1626185695508,
+      "contentHash": "239a610fe9ad93ec906b8a0782e0ec9d",
+      "sourceName": "@pancakeswap/pancake-swap-lib/contracts/math/SafeMath.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.0"
+      ],
+      "artifacts": [
+        "SafeMath"
+      ]
+    },
+    "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\node_modules\\@pancakeswap\\pancake-swap-lib\\contracts\\access\\Ownable.sol": {
+      "lastModificationDate": 1626185695499,
+      "contentHash": "447a490fede06cb7bf76706783d555ec",
+      "sourceName": "@pancakeswap/pancake-swap-lib/contracts/access/Ownable.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../GSN/Context.sol"
+      ],
+      "versionPragmas": [
+        ">=0.4.0"
+      ],
+      "artifacts": [
+        "Ownable"
+      ]
+    },
+    "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\node_modules\\@pancakeswap\\pancake-swap-lib\\contracts\\GSN\\Context.sol": {
+      "lastModificationDate": 1626185695485,
+      "contentHash": "bda6b7ae2ac2c388dfd3f350de868507",
+      "sourceName": "@pancakeswap/pancake-swap-lib/contracts/GSN/Context.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.0"
+      ],
+      "artifacts": [
+        "Context"
+      ]
+    },
+    "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\node_modules\\@pancakeswap\\pancake-swap-lib\\contracts\\token\\BEP20\\IBEP20.sol": {
+      "lastModificationDate": 1626185695491,
+      "contentHash": "b0a64c2fffcef1f6039f4eab432523a4",
+      "sourceName": "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.0"
+      ],
+      "artifacts": [
+        "IBEP20"
+      ]
+    },
+    "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\node_modules\\@pancakeswap\\pancake-swap-lib\\contracts\\utils\\Address.sol": {
+      "lastModificationDate": 1626185695477,
+      "contentHash": "de562b0730ba43a470f98a8f658c8a55",
+      "sourceName": "@pancakeswap/pancake-swap-lib/contracts/utils/Address.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.6.2"
+      ],
+      "artifacts": [
+        "Address"
+      ]
+    },
+    "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\node_modules\\@pancakeswap\\pancake-swap-lib\\contracts\\token\\BEP20\\SafeBEP20.sol": {
+      "lastModificationDate": 1626185695505,
+      "contentHash": "4270fe5f9af8b9ac8946859e9cbdf44f",
+      "sourceName": "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IBEP20.sol",
+        "../../math/SafeMath.sol",
+        "../../utils/Address.sol"
+      ],
+      "versionPragmas": [
+        "^0.6.0"
+      ],
+      "artifacts": [
+        "SafeBEP20"
+      ]
+    },
+    "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\contracts\\MasterPredWallet.sol": {
+      "lastModificationDate": 1626409160803,
+      "contentHash": "862a7efbccc04bc176138392d9c1b1c8",
+      "sourceName": "contracts/MasterPredWallet.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol",
+        "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol"
+      ],
+      "versionPragmas": [
+        "0.6.12"
+      ],
+      "artifacts": [
+        "MasterPredWallet"
+      ]
+    },
+    "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\contracts\\Farm.sol": {
+      "lastModificationDate": 1626429818313,
+      "contentHash": "5757a7b75cba7693eb98d5d673b794b0",
+      "sourceName": "contracts/Farm.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@pancakeswap/pancake-swap-lib/contracts/math/SafeMath.sol",
+        "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol",
+        "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol",
+        "@pancakeswap/pancake-swap-lib/contracts/access/Ownable.sol",
+        "./MasterPredWallet.sol"
+      ],
+      "versionPragmas": [
+        "0.6.12"
+      ],
+      "artifacts": [
+        "IMigratorChef",
+        "MasterPred"
+      ]
+    },
+    "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\contracts\\PredToken.sol": {
+      "lastModificationDate": 1626429813281,
+      "contentHash": "460083ec46d4d804639293b3c97346b8",
+      "sourceName": "contracts/PredToken.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.6.12"
+      ],
+      "artifacts": [
+        "Context",
+        "IBEP20",
+        "Ownable",
+        "Predictcoin",
+        "SafeMath"
+      ]
+    }
+  }
+}

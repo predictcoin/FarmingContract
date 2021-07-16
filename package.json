@@ -13,6 +13,8 @@
     "hardhat": "^2.4.3"
   },
   "dependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@pancakeswap/pancake-swap-lib": "0.0.4"
   }
 }

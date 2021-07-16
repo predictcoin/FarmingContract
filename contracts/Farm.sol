@@ -174,9 +174,11 @@ contract MasterPred is Ownable {
         if (block.number > pool.lastRewardBlock && lpSupply != 0) {
             uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
             uint256 predReward = multiplier.mul(predPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
-            if (pred.balanceOf(address(wallet)).sub(totalDebt) >= predReward) {
-                accPredPerShare = accPredPerShare.add(predReward.mul(1e12).div(lpSupply));    
+            uint256 predBal = pred.balanceOf(address(wallet)).sub(totalDebt);
+            if (predReward >= predBal) {
+                predReward = predBal;        
             }
+            accPredPerShare = accPredPerShare.add(predReward.mul(1e12).div(lpSupply));    
         }
         return user.amount.mul(accPredPerShare).div(1e12).sub(user.rewardDebt);
     }
@@ -203,10 +205,13 @@ contract MasterPred is Ownable {
         }
         uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
         uint256 predReward = multiplier.mul(predPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
-        if (pred.balanceOf(address(wallet)).sub(totalDebt) >= predReward) {
-            pool.accPredPerShare = pool.accPredPerShare.add(predReward.mul(1e12).div(lpSupply));
-            totalDebt = totalDebt.add(predReward);
+        uint256 predBal = pred.balanceOf(address(wallet)).sub(totalDebt);
+        if (predReward >= predBal) {
+            predReward = predBal;        
         }
+        
+        pool.accPredPerShare = pool.accPredPerShare.add(predReward.mul(1e12).div(lpSupply));
+        totalDebt = totalDebt.add(predReward);
         pool.lastRewardBlock = block.number;
     }
 
