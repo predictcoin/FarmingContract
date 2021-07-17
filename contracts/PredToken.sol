@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Unlicensed
 pragma solidity 0.6.12;
-
+//import "hardhat/console.sol";
 interface IBEP20 {
   /**
    * @dev Returns the amount of tokens in existence.

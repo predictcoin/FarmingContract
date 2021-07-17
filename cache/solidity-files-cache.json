@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\contracts\\BEP20.sol": {
-      "lastModificationDate": 1626429803100,
-      "contentHash": "0af2201833da53eeef7f66a93d4f8da8",
+      "lastModificationDate": 1626489567700,
+      "contentHash": "1e9168d60be2c520deabd3c9f8655954",
       "sourceName": "contracts/BEP20.sol",
       "solcConfig": {
         "version": "0.6.12",
@@ -28,14 +28,14 @@
         }
       },
       "imports": [
-        "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/BEP20.sol",
-        "@pancakeswap/pancake-swap-lib/contracts/math/SafeMath.sol"
+        "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/BEP20.sol"
       ],
-      "versionPragmas": [],
+      "versionPragmas": [
+        "0.6.12"
+      ],
       "artifacts": [
         "LPToken1",
-        "LPToken2",
-        "Test"
+        "LPToken2"
       ]
     },
     "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\node_modules\\@pancakeswap\\pancake-swap-lib\\contracts\\token\\BEP20\\BEP20.sol": {
@@ -326,8 +326,8 @@
       ]
     },
     "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\contracts\\Farm.sol": {
-      "lastModificationDate": 1626429818313,
-      "contentHash": "5757a7b75cba7693eb98d5d673b794b0",
+      "lastModificationDate": 1626520340085,
+      "contentHash": "d7b3fef4bb9139cca62caf22f9ef8bd7",
       "sourceName": "contracts/Farm.sol",
       "solcConfig": {
         "version": "0.6.12",
@@ -356,7 +356,8 @@
         "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol",
         "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol",
         "@pancakeswap/pancake-swap-lib/contracts/access/Ownable.sol",
-        "./MasterPredWallet.sol"
+        "./MasterPredWallet.sol",
+        "hardhat/console.sol"
       ],
       "versionPragmas": [
         "0.6.12"
@@ -367,9 +368,49 @@
       ]
     },
     "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\contracts\\PredToken.sol": {
-      "lastModificationDate": 1626429813281,
-      "contentHash": "460083ec46d4d804639293b3c97346b8",
+      "lastModificationDate": 1626518131537,
+      "contentHash": "209dd860580a3b06d9e69b5cf53c36b1",
       "sourceName": "contracts/PredToken.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "hardhat/console.sol"
+      ],
+      "versionPragmas": [
+        "0.6.12"
+      ],
+      "artifacts": [
+        "Context",
+        "IBEP20",
+        "Ownable",
+        "Predictcoin",
+        "SafeMath"
+      ]
+    },
+    "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\node_modules\\hardhat\\console.sol": {
+      "lastModificationDate": 1626185624007,
+      "contentHash": "cc4777addd464ea56fa35b1c45df0591",
+      "sourceName": "hardhat/console.sol",
       "solcConfig": {
         "version": "0.6.12",
         "settings": {
@@ -394,14 +435,10 @@
       },
       "imports": [],
       "versionPragmas": [
-        "0.6.12"
+        ">=0.4.22 <0.9.0"
       ],
       "artifacts": [
-        "Context",
-        "IBEP20",
-        "Ownable",
-        "Predictcoin",
-        "SafeMath"
+        "console"
       ]
     }
   }
