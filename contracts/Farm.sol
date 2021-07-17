@@ -9,7 +9,7 @@ import '@pancakeswap/pancake-swap-lib/contracts/access/Ownable.sol';
 
 import "./MasterPredWallet.sol";
 
-// import "@nomiclabs/buidler/console.sol";
+//import "hardhat/console.sol";
 
 interface IMigratorChef {
     // Perform LP token migration from legacy PancakeSwap to CakeSwap.
@@ -80,7 +80,7 @@ contract MasterPred is Ownable {
     // The block number when PRED mining starts.
     uint256 public startBlock;
     // Amount of MasterPred wallet balance already allocated to pools
-    uint256 public totalDebt;
+    uint256 public totalRewardDebt;
 
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount);
@@ -99,12 +99,12 @@ contract MasterPred is Ownable {
         // staking pool
         poolInfo.push(PoolInfo({
             lpToken: _pred,
-            allocPoint: 1000,
+            allocPoint: 200,
             lastRewardBlock: startBlock,
             accPredPerShare: 0
         }));
 
-        totalAllocPoint = 1000;
+        totalAllocPoint = 200;
     }
 
     function updateMultiplier(uint256 multiplierNumber) public onlyOwner {
@@ -136,6 +136,7 @@ contract MasterPred is Ownable {
         if (_withUpdate) {
             massUpdatePools();
         }
+
         uint256 prevAllocPoint = poolInfo[_pid].allocPoint;
         poolInfo[_pid].allocPoint = _allocPoint;
         if (prevAllocPoint != _allocPoint) {
@@ -174,7 +175,7 @@ contract MasterPred is Ownable {
         if (block.number > pool.lastRewardBlock && lpSupply != 0) {
             uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
             uint256 predReward = multiplier.mul(predPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
-            uint256 predBal = pred.balanceOf(address(wallet)).sub(totalDebt);
+            uint256 predBal = pred.balanceOf(address(wallet)).sub(totalRewardDebt);
             if (predReward >= predBal) {
                 predReward = predBal;        
             }
@@ -205,13 +206,13 @@ contract MasterPred is Ownable {
         }
         uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
         uint256 predReward = multiplier.mul(predPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
-        uint256 predBal = pred.balanceOf(address(wallet)).sub(totalDebt);
+        uint256 predBal = pred.balanceOf(address(wallet)).sub(totalRewardDebt);
         if (predReward >= predBal) {
             predReward = predBal;        
         }
         
         pool.accPredPerShare = pool.accPredPerShare.add(predReward.mul(1e12).div(lpSupply));
-        totalDebt = totalDebt.add(predReward);
+        totalRewardDebt = totalRewardDebt.add(predReward);
         pool.lastRewardBlock = block.number;
     }
 
@@ -267,7 +268,7 @@ contract MasterPred is Ownable {
 
     // Safe pred transfer function, just in case if rounding error causes pool to not have enough PREDs.
     function safePredTransfer(address _to, uint256 _amount) internal {
-        totalDebt = totalDebt.sub(wallet.safePredTransfer(_to, _amount));
+        totalRewardDebt = totalRewardDebt.sub(wallet.safePredTransfer(_to, _amount));
         
     }
 }
