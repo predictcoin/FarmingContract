@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat"
-import { Signer, Contract, BigNumber as _BigNumber } from "ethers";
+import { Signer, Contract, BigNumber as _BigNumber, BigNumber } from "ethers";
 
 let signers: Signer[], 
   farm: Contract, 
@@ -10,15 +10,18 @@ let signers: Signer[],
   lp1: Contract;
 const predPerBlock = 1000000000;
 let wallet: string;
+let walletContract: Contract;
 
-let poolBefore: {
+type pool = {
   lpToken: string, 
   allocPoint: _BigNumber, 
   lastRewardBlock: _BigNumber, 
   accPredPerShare: _BigNumber
 };
 
-const [depositA, depositB] = [1000, 2000]
+let poolBefore: pool;
+
+const [depositA, depositB] = [8883, 9248]
 const multiplier = 10000000
 
 describe("Farming Contract Tests", () => {
@@ -33,6 +36,7 @@ describe("Farming Contract Tests", () => {
     const Farm = await ethers.getContractFactory("MasterPred");
     farm = await Farm.deploy(pred.address, predPerBlock, 0)
     wallet = await farm.wallet()
+    walletContract = await ethers.getContractAt("MasterPredWallet", wallet)
 
     const Lp1 = await ethers.getContractFactory("LPToken1");
     lp1 = await Lp1.deploy()
@@ -122,18 +126,148 @@ describe("Farming Contract Tests", () => {
   
     it("should update user pending Pred when wallet increases balance", async () => {
       await pred.transfer(wallet, (10**17).toString());
-      console.log(await pred.balanceOf(wallet));
+      await farm.updatePool(0)
+      const user = await farm.userInfo(0, await PrederA.getAddress())
+      const pool = await farm.poolInfo(0)
       const pending = (multiplier*predPerBlock).toString();
-      expect(await farm.pendingPred(0, await PrederA.getAddress())).to.equal(pending)
+      expect(await farm.pendingPred(0, await PrederA.getAddress()))
+        .to.equal(
+          user.amount.mul(pool.accPredPerShare).div((10**12)).sub(user.rewardDebt)
+        )
+    })
+
+    it("should mass update pools", async () => {
+      await pred.transfer(wallet, (10**17).toString());
+      const oldTotalRewardDebt = await farm.totalRewardDebt()
+      const oldPool: pool = await farm.poolInfo(0)
+      await farm.massUpdatePools()
+      const newTotalRewardDebt = await farm.totalRewardDebt()
+      const newPool: pool = await farm.poolInfo(0)
+      const _multiplier = newPool.lastRewardBlock.sub(oldPool.lastRewardBlock).mul(multiplier)
+
+      expect(oldTotalRewardDebt).to.equal(0)
+      expect(newTotalRewardDebt, "TotalRewardDebt not correct").to.equal((_multiplier.mul(predPerBlock)).toString())
+      expect(newPool.lastRewardBlock).to.equal(oldPool.lastRewardBlock.add(BigNumber.from(2)))
+      expect(newPool.accPredPerShare, "AccPredShare not correct").to.equal(
+        oldPool.accPredPerShare.add(
+          _multiplier
+          .mul(predPerBlock)
+          .mul((10**12).toString())
+          .div(await pred.balanceOf(farm.address))
+        )
+    )})
+
+    it("it should withdraw user rewards with withdraw function", async () => {
+      await pred.transfer(wallet, (10**17).toString());
+      const pending: BigNumber = await farm.pendingPred(0, await PrederA.getAddress());
+
+      console.log(await farm.totalRewardDebt())
+      await expect(() => farm.withdraw(0, 0))
+        .to.changeTokenBalances(
+          pred, [walletContract, PrederA], [BigNumber.from(0).sub(pending.add(pending)), pending.add(pending)]
+      )
+
+      const user = await farm.userInfo(0, await PrederA.getAddress())
+      await farm.withdraw(0, 0)
+
+      expect(user.amount).to.equal(depositA)
+      expect(user.rewardDebt).to.equal(pending.mul(2))
+      
+      expect(await farm.totalRewardDebt()).to.equal(0)
+    })
+
+    xit("it should withdraw user rewards with deposit function", async () => {
+      await pred.transfer(wallet, (10**17).toString());
+      const pending: BigNumber = await farm.pendingPred(0, await PrederA.getAddress());
+
+      // has a rounding error in some cases
+      // await expect(() => farm.deposit(0, 0))
+      //   .to.changeTokenBalances(
+      //     pred, [walletContract, PrederA], [BigNumber.from(0).sub(pending.mul(2)), pending.mul(2)]
+      // )
+
+      const user = await farm.userInfo(0, await PrederA.getAddress())
+      await farm.deposit(0, 0)
+
+      expect(user.amount).to.equal(depositA)
+      expect(user.rewardDebt).to.equal(pending.mul(2))
+      
+      expect(await farm.totalRewardDebt()).to.equal(0)
+    })
+
+    xit("it should withdraw user balance and rewards", async () => {
+      await pred.transfer(wallet, (10**17).toString());
+      const pending: BigNumber = await farm.pendingPred(0, await PrederA.getAddress());
+      let user = await farm.userInfo(0, await PrederA.getAddress())
+      await farm.withdraw(0, depositA)
+      user = await farm.userInfo(0, await PrederA.getAddress())
+
+      await expect(() => farm.withdraw(0, depositA)
+      .to.changeTokenBalances(
+        pred, [walletContract, PrederA], [BigNumber.from(0).sub(pending.mul(2)), pending.mul(2)]
+      ))
+      expect(user.amount, "Total amount not withdrawn").to.equal(0)
+      expect(user.rewardDebt, "Reward debt not removed").to.equal(0)
+      //expect(await farm.totalRewardDebt(), "TotalRewardDebt not reduced properly").to.equal(oldTotalRewardDebt.sub(pending))
     })
   })
 
   context("when user deposits when wallet is not empty", async () => {
-      
+    beforeEach(async () => {
+      await pred.approve(await farm.address, 100000000)
+      await farm.updateMultiplier(multiplier)
+      poolBefore = await farm.poolInfo(0)
+      await pred.transfer(wallet, (10**17).toString());
+      await farm.deposit(0, depositA)
+    })
+
+    it("should update user info", async () => {
+      const userInfo = await farm.userInfo(0, await PrederA.getAddress())
+      const pending = await farm.pendingPred(0, await PrederA.getAddress());
+      expect(userInfo.amount).to.equal(depositA)
+      expect(userInfo.rewardDebt).to.equal(0)
+      expect(await farm.totalRewardDebt()).to.equal(pending)
+      expect(await farm.pendingPred(0, await PrederA.getAddress())).to.equal(pending)
+    })
+
+    it("should update pool", async () => {
+      await farm.updatePool(0)
+      const poolAfter = await farm.poolInfo(0)
+
+      expect(poolAfter.lastRewardBlock).to.gt(poolBefore.lastRewardBlock)
+      expect(poolAfter.accPredPerShare).to.equal(
+        poolBefore.accPredPerShare.add(
+          BigNumber.from(multiplier)
+          .mul(predPerBlock)
+          .mul((10**12).toString())
+          .div(await pred.balanceOf(farm.address))
+        )
+      )
+    })
+    expect(await farm.totalRewardDebt()).to.equal(
+      BigNumber.from(multiplier)
+      .mul(predPerBlock)
+    )
   })
 
   context("when two users deposit across two pools", async () => {
+    beforeEach(async () => {
+      await pred.approve(await farm.address, 100000000)
+      await lp1.approve(await farm.address, 100000000)
+      await farm.updateMultiplier(multiplier)
+      poolBefore = await farm.poolInfo(0)
+      await pred.transfer(wallet, (10**17).toString())
 
+      await farm.deposit(0, depositA)
+      const poolAddr = lp1.address
+      await farm.add(400, poolAddr, false)
+      await farm.deposit(1, depositB)
+    })
+
+    xit("should update the pools", async () => {
+      await farm.massUpdatePools()
+
+    })
   })
 
   xit("should withdraw funds and forfeit rewards with Emergency withdraw", () => {
