@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: Unlicensed
 
-pragma solidity 0.6.12;
+pragma solidity 0.8.2;
 
-import "@pancakeswap/pancake-swap-lib/contracts/math/SafeMath.sol";
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol";
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol";
-import "@pancakeswap/pancake-swap-lib/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "./interfaces/IBEP20.sol";
+import "./utils/SafeBEP20.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import "./MasterPredWallet.sol";
 
@@ -31,7 +32,7 @@ interface IMigratorChef {
 // distributed and the community can show to govern itself.
 //
 // Have fun reading it. Hopefully it's bug-free. God bless.
-contract MasterPred is Ownable {
+contract MasterPred is Initializable, UUPSUpgradeable, OwnableUpgradeable{
     using SafeMath for uint256;
     using SafeBEP20 for IBEP20;
 
@@ -65,7 +66,7 @@ contract MasterPred is Ownable {
     // PRED tokens distributed per block.
     uint256 public predPerBlock;
     // Bonus muliplier for early preders.
-    uint256 public BONUS_MULTIPLIER = 1;
+    uint256 public BONUS_MULTIPLIER;
     // The migrator contract. It has a lot of power. Can only be set through governance (owner).
     IMigratorChef public migrator;
     //contract holding PRED tokens
@@ -76,7 +77,7 @@ contract MasterPred is Ownable {
     // Info of each user that stakes LP tokens.
     mapping(uint256 => mapping(address => UserInfo)) public userInfo;
     // Total allocation points. Must be the sum of all allocation points in all pools.
-    uint256 public totalAllocPoint = 0;
+    uint256 public totalAllocPoint;
     // The block number when PRED mining starts.
     uint256 public startBlock;
     // Amount of MasterPred wallet balance already allocated to pools
@@ -90,11 +91,12 @@ contract MasterPred is Ownable {
         uint256 amount
     );
 
-    constructor(
+    function initialize(
         IBEP20 _pred,
         uint256 _predPerBlock,
         uint256 _startBlock
-    ) public {
+    ) external initializer {
+        __Ownable_init();
         pred = _pred;
         predPerBlock = _predPerBlock;
         startBlock = _startBlock;
@@ -110,8 +112,12 @@ contract MasterPred is Ownable {
             })
         );
 
+        BONUS_MULTIPLIER = 1;
         totalAllocPoint = 200;
     }
+    
+    // Authourizes upgrade to be done by the proxy. Theis contract uses a UUPS upgrade model
+    function _authorizeUpgrade(address newImplementation) internal override onlyOwner{}
 
     function updateMultiplier(uint256 multiplierNumber) public onlyOwner {
         BONUS_MULTIPLIER = multiplierNumber;

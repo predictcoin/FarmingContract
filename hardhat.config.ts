@@ -1,4 +1,5 @@
 import "@nomiclabs/hardhat-waffle";
+import '@openzeppelin/hardhat-upgrades'
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
@@ -13,6 +14,9 @@ module.exports = {
       },
       {
         version: "0.6.12",
+      },
+      {
+        version: "0.8.2",
       },
     ],
   },

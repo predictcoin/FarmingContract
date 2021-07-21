@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ethers } from "hardhat"
+import { ethers, upgrades } from "hardhat"
 import { Signer, Contract, BigNumber as _BigNumber, BigNumber } from "ethers";
 
 let signers: Signer[], 
@@ -34,7 +34,8 @@ describe("Farming Contract Tests", () => {
     pred = await Pred.deploy();
 
     const Farm = await ethers.getContractFactory("MasterPred");
-    farm = await Farm.deploy(pred.address, predPerBlock, 0)
+    //farm = await Farm.deploy(pred.address, predPerBlock, 0)
+    farm = await upgrades.deployProxy(Farm, [pred.address, predPerBlock, 0], {kind: "uups"})
     wallet = await farm.wallet()
     walletContract = await ethers.getContractAt("MasterPredWallet", wallet)
 

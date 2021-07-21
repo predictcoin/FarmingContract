@@ -1,0 +1,131 @@
+{
+	"compiler": {
+		"version": "0.8.0+commit.c7dfd78e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "contract IBEP20",
+						"name": "_pred",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "pred",
+				"outputs": [
+					{
+						"internalType": "contract IBEP20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_amount",
+						"type": "uint256"
+					}
+				],
+				"name": "safePredTransfer",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/MasterPredWallet.sol": "MasterPredWallet"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/utils/Address.sol": {
+			"keccak256": "0x3b4820cac4f127869f6eb496c1d74fa6ac86ed24071e0f94742e6aef20e7252c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://23e1c7303c30a2ef9c9b3f861cda15c78e4c9697b4a7988f2bf7b21c392a02fb",
+				"dweb:/ipfs/QmWQJh5MsXJZjSTzAs9n5gtrqWYgXwkBa6xfwD5KKGQgSC"
+			]
+		},
+		"contracts/MasterPredWallet.sol": {
+			"keccak256": "0x9a705b162dd2990fd4918979437bfdeaba0ffe7bc21258bb98bd6786b9ad6231",
+			"license": "Unlicensed",
+			"urls": [
+				"bzz-raw://e0f7d7e2f664d85490381250c7754dbaaf5206bb7b77a158c0602e020e68c876",
+				"dweb:/ipfs/QmcwXUVySEEr5CV7fqv8C1xnSoVkaFnu963NnNvE9uxKtr"
+			]
+		},
+		"contracts/interfaces/IBEP20.sol": {
+			"keccak256": "0xa8a8bc39168156141fc78a47caf8ee13e630031ef870e74f3fd5658904e71172",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0d35923e72ea258c1037e82dc0149af16ad82047e7d6147069d299c687f7817a",
+				"dweb:/ipfs/Qmah7tS38vUoA3m8TCrgX5HYyVmpgcxdJPvRK3WbKf1Q6M"
+			]
+		},
+		"contracts/utils/SafeBEP20.sol": {
+			"keccak256": "0x3b88bb34552b3129764b987137b67e74ad59a7025f445b6ed1764081f2fa0ff0",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9ee514097a00761a045fe9d61cd54a6aad61b3fc9fa54e650c08ff9180569711",
+				"dweb:/ipfs/QmRQWikWtDgTh8vdi2f9RMQ6hpfdihNQVaLy5d6yZvmNuT"
+			]
+		}
+	},
+	"version": 1
+}

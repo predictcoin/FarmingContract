@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Unlicensed
-pragma solidity 0.6.12;
+pragma solidity 0.8.2;
 
-import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol";
-import '@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol';
+import "./interfaces/IBEP20.sol";
+import './utils/SafeBEP20.sol';
 
 // SyrupBar with Governance.
 contract MasterPredWallet {
@@ -13,7 +13,7 @@ contract MasterPredWallet {
 
     constructor(
         IBEP20 _pred
-    ) public {
+    ) {
         pred = _pred;
         owner = msg.sender;
     }
