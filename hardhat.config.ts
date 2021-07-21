@@ -1,5 +1,8 @@
 import "@nomiclabs/hardhat-waffle";
 import '@openzeppelin/hardhat-upgrades'
+import {config} from "dotenv"
+config()
+const mnemonic = process.env.MNEMONIC;
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
@@ -20,4 +23,15 @@ module.exports = {
       },
     ],
   },
+  networks: {
+    bscTestnet:{
+      url: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+      chainId: 97,
+      accounts: {mnemonic, path: "m/44'/60'/0'/0", inittialIndex: 0, count: 10},
+      timeout: 200000
+    }
+  },
+  mocha: {
+    timeout: 200000
+  }
 };
