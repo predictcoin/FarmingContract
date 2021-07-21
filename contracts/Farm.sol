@@ -7,6 +7,7 @@ import "./interfaces/IBEP20.sol";
 import "./utils/SafeBEP20.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 
 import "./MasterPredWallet.sol";
 
@@ -32,7 +33,7 @@ interface IMigratorChef {
 // distributed and the community can show to govern itself.
 //
 // Have fun reading it. Hopefully it's bug-free. God bless.
-contract MasterPred is Initializable, UUPSUpgradeable, OwnableUpgradeable{
+contract MasterPred is Initializable, PausableUpgradeable, UUPSUpgradeable, OwnableUpgradeable{
     using SafeMath for uint256;
     using SafeBEP20 for IBEP20;
 
@@ -94,13 +95,14 @@ contract MasterPred is Initializable, UUPSUpgradeable, OwnableUpgradeable{
     function initialize(
         IBEP20 _pred,
         uint256 _predPerBlock,
-        uint256 _startBlock
+        uint256 _startBlock,
+        MasterPredWallet _wallet
     ) external initializer {
         __Ownable_init();
         pred = _pred;
         predPerBlock = _predPerBlock;
         startBlock = _startBlock;
-        wallet = new MasterPredWallet(_pred);
+        wallet = _wallet;
 
         // staking pool
         poolInfo.push(
@@ -112,7 +114,7 @@ contract MasterPred is Initializable, UUPSUpgradeable, OwnableUpgradeable{
             })
         );
 
-        BONUS_MULTIPLIER = 1;
+        BONUS_MULTIPLIER = 10000000;
         totalAllocPoint = 200;
     }
     
@@ -265,7 +267,7 @@ contract MasterPred is Initializable, UUPSUpgradeable, OwnableUpgradeable{
     }
 
     // Deposit LP tokens to MasterPred for PRED allocation.
-    function deposit(uint256 _pid, uint256 _amount) public {
+    function deposit(uint256 _pid, uint256 _amount) public whenNotPaused {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
         updatePool(_pid);
@@ -295,7 +297,7 @@ contract MasterPred is Initializable, UUPSUpgradeable, OwnableUpgradeable{
     }
 
     // Withdraw LP tokens from MasterPred.
-    function withdraw(uint256 _pid, uint256 _amount) public {
+    function withdraw(uint256 _pid, uint256 _amount) public whenNotPaused {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
         require(user.amount >= _amount, "withdraw: not good");
@@ -316,14 +318,18 @@ contract MasterPred is Initializable, UUPSUpgradeable, OwnableUpgradeable{
     }
 
     // Withdraw without caring about rewards. EMERGENCY ONLY.
-    function emergencyWithdraw(uint256 _pid) public {
+    function emergencyWithdraw(uint256 _pid) public whenPaused {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][msg.sender];
         uint256 amount = user.amount;
         user.amount = 0;
         user.rewardDebt = 0;
-        if (amount <= totalRewardDebt){
-            totalRewardDebt = totalRewardDebt.sub(amount);
+        uint256 pending = amount
+            .mul(pool.accPredPerShare)
+            .div(1e12)
+            .sub(user.rewardDebt);
+        if (pending <= totalRewardDebt){
+            totalRewardDebt = totalRewardDebt.sub(pending);
         }
         pool.lpToken.safeTransfer(address(msg.sender), amount);
         emit EmergencyWithdraw(msg.sender, _pid, amount);
@@ -334,5 +340,14 @@ contract MasterPred is Initializable, UUPSUpgradeable, OwnableUpgradeable{
         totalRewardDebt = totalRewardDebt.sub(
             wallet.safePredTransfer(_to, _amount)
         );
+    }
+
+    //pause deposits and withdrawals and allow only emergency withdrawals(forfeit funds)
+    function pause() external onlyOwner{
+        _pause();
+    }
+
+    function unpause() external onlyOwner{
+        _unpause();
     }
 }

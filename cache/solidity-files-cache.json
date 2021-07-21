@@ -252,8 +252,8 @@
       ]
     },
     "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\contracts\\MasterPredWallet.sol": {
-      "lastModificationDate": 1626832609194,
-      "contentHash": "23aac3108ca3ab52b0762d659607d19d",
+      "lastModificationDate": 1626856115953,
+      "contentHash": "62bdc524c8420fd2e5c1fac4a8ba5190",
       "sourceName": "contracts/MasterPredWallet.sol",
       "solcConfig": {
         "version": "0.8.2",
@@ -279,7 +279,8 @@
       },
       "imports": [
         "./interfaces/IBEP20.sol",
-        "./utils/SafeBEP20.sol"
+        "./utils/SafeBEP20.sol",
+        "@openzeppelin/contracts/access/Ownable.sol"
       ],
       "versionPragmas": [
         "0.8.2"
@@ -289,8 +290,8 @@
       ]
     },
     "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\contracts\\Farm.sol": {
-      "lastModificationDate": 1626833934558,
-      "contentHash": "941ec0fe054d3da14ed8c67434af11e6",
+      "lastModificationDate": 1626862571490,
+      "contentHash": "a68a13cb6053eb0fb81619ee0b80c8a5",
       "sourceName": "contracts/Farm.sol",
       "solcConfig": {
         "version": "0.8.2",
@@ -320,6 +321,7 @@
         "./utils/SafeBEP20.sol",
         "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol",
         "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol",
+        "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol",
         "./MasterPredWallet.sol"
       ],
       "versionPragmas": [
@@ -1003,6 +1005,79 @@
       ],
       "artifacts": [
         "Context"
+      ]
+    },
+    "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\node_modules\\@openzeppelin\\contracts\\access\\Ownable.sol": {
+      "lastModificationDate": 1626826250540,
+      "contentHash": "4fe56b59ced59d87df6b796758f62895",
+      "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
+      "solcConfig": {
+        "version": "0.8.2",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Ownable"
+      ]
+    },
+    "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\node_modules\\@openzeppelin\\contracts-upgradeable\\security\\PausableUpgradeable.sol": {
+      "lastModificationDate": 1626814774221,
+      "contentHash": "12a1ac4f7ef141dcf92f6dba57890d16",
+      "sourceName": "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.2",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/ContextUpgradeable.sol",
+        "../proxy/utils/Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "PausableUpgradeable"
       ]
     }
   }

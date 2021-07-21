@@ -26,6 +26,7 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.2.0",
     "@openzeppelin/contracts-upgradeable": "^4.2.0",
-    "@pancakeswap/pancake-swap-lib": "0.0.4"
+    "@pancakeswap/pancake-swap-lib": "0.0.4",
+    "dotenv": "^10.0.0"
   }
 }
