@@ -10,7 +10,7 @@ async function main() {
   const wallet = await Wallet.deploy(pred.address);
   const Farm = await ethers.getContractFactory("MasterPred");
   const farm = await upgrades.deployProxy(Farm, [pred.address, predPerBlock, 0, wallet.address], {kind: "uups"})
-  wallet.setMasterPred(farm.address);
+  await wallet.setMasterPred(farm.address);
 
   console.log(`Farm deployed to:${farm.address}, wallet deployed to:${wallet.address}`);
 }
