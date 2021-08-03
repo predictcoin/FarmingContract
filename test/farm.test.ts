@@ -41,7 +41,7 @@ describe("Farming Contract Tests", () => {
     Farm = await ethers.getContractFactory("MasterPred");
     //farm = await Farm.deploy(pred.address, predPerBlock, 0)
     farm = await upgrades.deployProxy(Farm, [pred.address, predPerBlock, 0, wallet.address], {kind: "uups"})
-    wallet.setMasterPred(farm.address);
+    await wallet.setMasterPred(farm.address);
 
     const Lp1 = await ethers.getContractFactory("LPToken1");
     lp1 = await Lp1.deploy()
@@ -138,7 +138,7 @@ describe("Farming Contract Tests", () => {
       const pending = (multiplier*predPerBlock).toString();
       expect(await farm.pendingPred(0, await PrederA.getAddress()))
         .to.equal(
-          user.amount.mul(pool.accPredPerShare).div((10**12)).sub(user.rewardDebt)
+          user.amount.mul(pool.accPredPerShare).div((BigNumber.from(10).pow(30))).sub(user.rewardDebt)
         )
     })
 
@@ -158,7 +158,7 @@ describe("Farming Contract Tests", () => {
         oldPool.accPredPerShare.add(
           _multiplier
           .mul(predPerBlock)
-          .mul((10**12).toString())
+          .mul((BigNumber.from(10).pow(30)))
           .div(await pred.balanceOf(farm.address))
         )
     )})
@@ -173,13 +173,10 @@ describe("Farming Contract Tests", () => {
           pred, [wallet, PrederA], [BigNumber.from(0).sub(pending.add(pending)), pending.add(pending)]
       )
 
-      
       user = await farm.userInfo(0, await PrederA.getAddress())
-      await farm.withdraw(0, 0)
-
       expect(user.amount).to.equal(depositA)
       expect(user.rewardDebt).to.equal(pending.mul(2))
-      
+      expect(await farm.pendingPred(0, await PrederA.getAddress())).to.equal(0);
       expect(await farm.totalRewardDebt()).to.equal(0)
     })
 
@@ -193,7 +190,7 @@ describe("Farming Contract Tests", () => {
       )
 
       const user = await farm.userInfo(0, await PrederA.getAddress())
-      await farm.deposit(0, 0)
+      //await farm.deposit(0, 0)
 
       expect(user.amount).to.equal(depositA)
       expect(user.rewardDebt).to.equal(pending.mul(2))
@@ -209,9 +206,10 @@ describe("Farming Contract Tests", () => {
       user = await farm.userInfo(0, await PrederA.getAddress())
 
       await expect(() => farm.withdraw(0, depositA)
-      .to.changeTokenBalances(
-        pred, [walletContract, PrederA], [BigNumber.from(0).sub(pending.mul(2)), pending.mul(2)]
-      ))
+        .to.changeTokenBalances(
+          pred, [walletContract, PrederA], [BigNumber.from(0).sub(pending.mul(2)), pending.mul(2)]
+        ))
+
       expect(user.amount, "Total amount not withdrawn").to.equal(0)
       expect(user.rewardDebt, "Reward debt not removed").to.equal(0)
       expect(await farm.totalRewardDebt(), "TotalRewardDebt not reduced properly").to.equal(0)
@@ -245,7 +243,7 @@ describe("Farming Contract Tests", () => {
         poolBefore.accPredPerShare.add(
           BigNumber.from(multiplier)
           .mul(predPerBlock)
-          .mul((10**12).toString())
+          .mul((BigNumber.from(10).pow(30)).toString())
           .div(await pred.balanceOf(farm.address))
         )
       )
@@ -254,6 +252,29 @@ describe("Farming Contract Tests", () => {
       BigNumber.from(multiplier)
       .mul(predPerBlock)
     )
+  })
+
+  context("Compound rewards", () => {
+    beforeEach(async () => {
+      await pred.approve(await farm.address, 100000000);
+      await pred.transfer(wallet.address, (10**17).toString());
+      await farm.deposit(0, 1000);
+      await farm.massUpdatePools();
+    })
+    it("should compound rewards", async () => {
+      let pending: BigNumber = await farm.pendingPred(0, await PrederA.getAddress());
+      const deposit: BigNumber = (await farm.userInfo(0, await PrederA.getAddress())).amount;
+
+      await expect(() => farm.compound())
+        .to.changeTokenBalances(
+          pred, [wallet, farm], [BigNumber.from(0).sub(pending).mul(2), pending.mul(2)]
+        )
+      
+      expect(pending).to.be.above(0);
+      expect(await farm.pendingPred(0, await PrederA.getAddress())).to.equal(0);
+      expect((await farm.userInfo(0, await PrederA.getAddress())).amount)
+        .to.equal(deposit.add(pending.mul(2)));
+    })
   })
 
   context("when contract is paused", () => {

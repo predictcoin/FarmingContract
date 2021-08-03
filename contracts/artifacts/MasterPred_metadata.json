@@ -207,6 +207,13 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "compound",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -823,11 +830,11 @@
 			]
 		},
 		"contracts/Farm.sol": {
-			"keccak256": "0x0feca084c3ba667cd59e3f8230ad72029ec00e5f2bc4276ccb21c113ba7d006a",
+			"keccak256": "0x4a839421de2f9a401533f7aca809bc3c3b23b61325f2515f0ccc9159363bbc28",
 			"license": "Unlicensed",
 			"urls": [
-				"bzz-raw://e507dae1904b19e092e098eb4d245786cf0fd4f2f0e4abc11f08a5c6c4c96bd4",
-				"dweb:/ipfs/QmU3ufMXyozjST1P18bFdvJF7Mai8T32sjpjEnfzwK8yQf"
+				"bzz-raw://f842746f8e04dd4ba103e62b8ba8ae0a8df50067d5786d1da6a292074ab4a318",
+				"dweb:/ipfs/QmQGzeQgbeWjAf5hbv6nvkrJQZJMmx8wpmRhm2jWePm7Fk"
 			]
 		},
 		"contracts/MasterPredWallet.sol": {

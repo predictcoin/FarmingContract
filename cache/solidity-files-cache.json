@@ -290,8 +290,8 @@
       ]
     },
     "C:\\Users\\user\\Desktop\\Work\\PRED-Staking\\contracts\\Farm.sol": {
-      "lastModificationDate": 1626862571490,
-      "contentHash": "a68a13cb6053eb0fb81619ee0b80c8a5",
+      "lastModificationDate": 1627966248001,
+      "contentHash": "3c89414251b42056a8283120b5e00497",
       "sourceName": "contracts/Farm.sol",
       "solcConfig": {
         "version": "0.8.2",

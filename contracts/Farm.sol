@@ -224,10 +224,10 @@ contract MasterPred is Initializable, PausableUpgradeable, UUPSUpgradeable, Owna
                 predReward = predBal;
             }
             accPredPerShare = accPredPerShare.add(
-                predReward.mul(1e12).div(lpSupply)
+                predReward.mul(1e30).div(lpSupply)
             );
         }
-        return user.amount.mul(accPredPerShare).div(1e12).sub(user.rewardDebt);
+        return user.amount.mul(accPredPerShare).div(1e30).sub(user.rewardDebt);
     }
 
     // Update reward variables for all pools. Be careful of gas spending!
@@ -251,16 +251,16 @@ contract MasterPred is Initializable, PausableUpgradeable, UUPSUpgradeable, Owna
         }
         uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
         uint256 predReward = multiplier
-        .mul(predPerBlock)
-        .mul(pool.allocPoint)
-        .div(totalAllocPoint);
+            .mul(predPerBlock)
+            .mul(pool.allocPoint)
+            .div(totalAllocPoint);
         uint256 predBal = pred.balanceOf(address(wallet)).sub(totalRewardDebt);
         if (predReward >= predBal) {
             predReward = predBal;
         }
 
         pool.accPredPerShare = pool.accPredPerShare.add(
-            predReward.mul(1e12).div(lpSupply)
+            predReward.mul(1e30).div(lpSupply)
         );
         totalRewardDebt = totalRewardDebt.add(predReward);
         pool.lastRewardBlock = block.number;
@@ -275,7 +275,7 @@ contract MasterPred is Initializable, PausableUpgradeable, UUPSUpgradeable, Owna
             uint256 pending = user
             .amount
             .mul(pool.accPredPerShare)
-            .div(1e12)
+            .div(1e30)
             .sub(user.rewardDebt);
             if (pending > 0) {
                 safePredTransfer(msg.sender, pending);
@@ -292,7 +292,7 @@ contract MasterPred is Initializable, PausableUpgradeable, UUPSUpgradeable, Owna
                 pool.lpToken.balanceOf(address(this)).sub(balBefore)
             );
         }
-        user.rewardDebt = user.amount.mul(pool.accPredPerShare).div(1e12);
+        user.rewardDebt = user.amount.mul(pool.accPredPerShare).div(1e30);
         emit Deposit(msg.sender, _pid, _amount);
     }
 
@@ -303,7 +303,7 @@ contract MasterPred is Initializable, PausableUpgradeable, UUPSUpgradeable, Owna
         require(user.amount >= _amount, "withdraw: not good");
 
         updatePool(_pid);
-        uint256 pending = user.amount.mul(pool.accPredPerShare).div(1e12).sub(
+        uint256 pending = user.amount.mul(pool.accPredPerShare).div(1e30).sub(
             user.rewardDebt
         );
         if (pending > 0) {
@@ -313,8 +313,37 @@ contract MasterPred is Initializable, PausableUpgradeable, UUPSUpgradeable, Owna
             user.amount = user.amount.sub(_amount);
             pool.lpToken.safeTransfer(address(msg.sender), _amount);
         }
-        user.rewardDebt = user.amount.mul(pool.accPredPerShare).div(1e12);
+        user.rewardDebt = user.amount.mul(pool.accPredPerShare).div(1e30);
         emit Withdraw(msg.sender, _pid, _amount);
+    }
+    
+    // helps users compound their PRED rewards in pool 0 in a single ttansaction
+    function compound() public whenNotPaused{
+        PoolInfo storage pool = poolInfo[0];
+        UserInfo storage user = userInfo[0][msg.sender];
+        updatePool(0);
+        
+        if (user.amount > 0) {
+            uint256 pending = user
+                .amount
+                .mul(pool.accPredPerShare)
+                .div(1e30)
+                .sub(user.rewardDebt);
+ 
+            uint256 balBefore = pool.lpToken.balanceOf(address(this));
+            
+            if (pending > 0) {
+                safePredTransfer(address(this), pending);
+            }
+            
+            user.amount = user.amount.add(
+                pool.lpToken.balanceOf(address(this)).sub(balBefore)
+            );
+            
+            user.rewardDebt = user.amount.mul(pool.accPredPerShare).div(1e30);
+            emit Withdraw(msg.sender, 0, pending);
+            emit Deposit(msg.sender, 0, pending);
+        }
     }
 
     // Withdraw without caring about rewards. EMERGENCY ONLY.
@@ -326,7 +355,7 @@ contract MasterPred is Initializable, PausableUpgradeable, UUPSUpgradeable, Owna
         user.rewardDebt = 0;
         uint256 pending = amount
             .mul(pool.accPredPerShare)
-            .div(1e12)
+            .div(1e30)
             .sub(user.rewardDebt);
         if (pending <= totalRewardDebt){
             totalRewardDebt = totalRewardDebt.sub(pending);
