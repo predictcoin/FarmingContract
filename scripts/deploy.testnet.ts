@@ -2,7 +2,7 @@ import { ethers, upgrades } from "hardhat"
 
 async function main() {
   // We get the contract to deploy
-  const predPerBlock = 1000000000;
+  const predPerBlock = 5000000000;
   const Pred = await ethers.getContractFactory("Predictcoin");
   const pred = await Pred.deploy();
 

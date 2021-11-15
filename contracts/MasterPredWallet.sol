@@ -5,7 +5,6 @@ import "./interfaces/IBEP20.sol";
 import './utils/SafeBEP20.sol';
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-// SyrupBar with Governance.
 contract MasterPredWallet is Ownable {
     using SafeBEP20 for IBEP20;
     // The PRED TOKEN!

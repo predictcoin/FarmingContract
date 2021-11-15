@@ -114,7 +114,7 @@ contract MasterPred is Initializable, PausableUpgradeable, UUPSUpgradeable, Owna
             })
         );
 
-        BONUS_MULTIPLIER = 10000000;
+        BONUS_MULTIPLIER = 1000000;
         totalAllocPoint = 200;
     }
     
